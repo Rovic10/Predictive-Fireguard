@@ -1,0 +1,66 @@
+.logo img {
+  width: 5%;
+}
+
+.navbar{
+  background-color:   rgb(152, 9, 9);
+}
+
+.navbar:hover {
+  background-color:red;
+  transition: 0.3s;
+}
+
+.nav-link {
+  color: white;
+  font-weight: bolder;
+  border: solid white;
+  border-radius: 5px;
+}
+
+.nav-link:hover {
+  background-color: red;
+  transition: 0.3s;
+  color: white;
+}
+
+.nav-item {
+  color: white;
+  font-weight: bolder;
+  border: solid white;
+  border-radius: 5px;
+}
+
+.navtitle {
+  margin-top: -5%;
+  display: flex;
+  justify-content: center;
+  margin-left: 50%;
+}
+
+.navbar .navtitle ul {
+  list-style-type: none;
+}
+
+.navbar .navtitle li {
+display: table-cell;
+}
+
+.navbar .navtitle li a {
+  display: block;
+  text-align: center;
+  padding: 1em;
+  text-decoration: none;
+  font-size: 18px;
+  font-weight: bolder;
+  color: white;
+}
+
+.navbar .navtitle li a:hover {
+text-decoration: underline;
+text-underline-offset: 10px;
+color: yellow;
+transition: 0.3s;
+transform: scale(110%);
+}
+

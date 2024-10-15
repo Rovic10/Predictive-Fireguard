@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="reports.css" />
+    <title>Barangay San Nicolas</title>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            fetchLatestReports();
+        });
+
+        function fetchLatestReports() {
+            const urls = [
+                'http://localhost:5001/api/san_records?_limit=30&_sort=date,DESC',  // Fetch more records initially
+            ];
+
+            const sections = ['pinagbuhatan'];
+
+            sections.forEach((section, index) => {
+                fetch(urls[index])
+                    .then(response => response.json())
+                    .then(data => {
+                        const slidesContainer = document.getElementById(`${section}-slides`);
+                        const numReportsPerSlide = 10;
+                        const numSlides = Math.ceil(data.length / numReportsPerSlide);
+                        slidesContainer.innerHTML = ''; // Clear previous content
+
+                        for (let i = 0; i < numSlides; i++) {
+                            const slide = document.createElement('div');
+                            slide.classList.add('slide');
+                            const start = i * numReportsPerSlide;
+                            const end = Math.min(start + numReportsPerSlide, data.length);
+                            const table = document.createElement('table');
+                            table.innerHTML = `
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>DATE</th>
+                                        <th>LOCATION</th>
+                                        <th>CAUSE</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                            `;
+                            data.slice(start, end).forEach(incident => {
+                                const date = new Date(incident.date);
+                                const formattedDate = date.toLocaleString('default', { month: 'long' }) + ' ' + date.getDate() + ', ' + date.getFullYear();
+                                const row = document.createElement('tr');
+                                row.innerHTML = `
+                                    <td>${incident.id}</td>
+                                    <td>${formattedDate}</td>
+                                    <td>${incident.location}</td>
+                                    <td>${incident.cause}</td>
+                                `;
+                                table.querySelector('tbody').appendChild(row);
+                            });
+                            table.innerHTML += `</tbody>`;
+                            slide.appendChild(table);
+                            
+
+                            // Add page number
+                            const pageNumber = document.createElement('div');
+                            pageNumber.classList.add('page-number');
+                            pageNumber.textContent = `Page ${i + 1} of ${numSlides}`;
+                            slide.insertBefore(pageNumber, table); // Place page number above the table
+
+                            slidesContainer.appendChild(slide);
+                        }
+                        initSlider();
+                    })
+                    .catch(error => {
+                        console.error(`Error fetching ${section} records:`, error);
+                        document.getElementById(`${section}-slides`).innerHTML = '<div class="error">Error loading data. Please try again later.</div>';
+                    });
+            });
+        }
+
+        function initSlider() {
+            let currentSlide = 0;
+            const slides = document.querySelectorAll('.slide');
+            const nextButton = document.getElementById('next-slide');
+            const prevButton = document.getElementById('prev-slide');
+
+            function showSlide(index) {
+                slides.forEach((slide, i) => {
+                    slide.style.display = (i === index) ? 'block' : 'none';
+                });
+            }
+
+            showSlide(currentSlide);
+
+            nextButton.addEventListener('click', () => {
+                currentSlide = (currentSlide + 1) % slides.length;
+                showSlide(currentSlide);
+            });
+
+            prevButton.addEventListener('click', () => {
+                currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+                showSlide(currentSlide);
+            });
+        }
+    </script>
+    <style>
+
+        .slide {
+            display: none;
+            padding: 10px; /* Add padding to separate content from borders */
+        }
+
+        .slider-container table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px; /* Add space between table and page number */
+        }
+
+        .slider-container th, .slider-container td {
+            padding: 8px;
+            text-align: left;
+        }
+
+        .page-number {
+            text-align: center;
+            margin: 10px 0;
+            color: white;
+            font-weight: bold;
+            font-size: 15px; /* Adjust font size as needed */
+            /* Ensure no border or outline */
+            border: none;
+            outline: none;
+        }
+
+        .slider-nav {
+            text-align: center;
+            margin: 10px 0;
+        }
+
+        .slider-nav button {
+            background-color: black;
+            border: 1px solid white;
+            color: white;
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        .slider-nav button:hover {
+            background-color: #444;
+        }
+
+        .error {
+            color: red;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .bottom-link {
+            position: fixed;
+            bottom: 10px;
+            left: 10px;
+            color: white;
+            font-size: 1em;
+            background: black;
+            padding: 5px;
+            text-decoration: none;
+        }
+
+        .bottom-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <h2>BARANGAY SAN NICOLAS FIRE INCIDENT REPORTS</h2>
+    </nav>
+    <br>
+
+    <div class="report-section">
+        <div id="pinagbuhatan-slides" class="slider-container">
+            <!-- Slides will be inserted here by JavaScript -->
+        </div>
+        <div class="slider-nav">
+            <button id="prev-slide" style="font-size: 10px;">PREVIOUS</button>
+            <button id="next-slide" style="font-size: 10px;">NEXT</button>
+        </div>
+    </div>
+
+    <!-- Link added at the bottom -->
+    <a href="http://localhost:3000/client/homeclient.html" class="bottom-link" style="font-size: 12px;">BACK</a>
+</body>
+</html>

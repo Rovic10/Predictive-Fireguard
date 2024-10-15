@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Home</title>
+    <link rel="stylesheet" href="homeclient.css"/>
+    <link rel="icon" href="fireprev/icon1.ico" type="image">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <style>
+    .dialog {
+        display: none; /* Hidden by default */
+        position: fixed;
+        z-index: 1; /* Sit on top */
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgba(0,0,0,0.8); /* Black background with higher opacity */
+    }
+
+    .dialog-content {
+        background-color: black;
+        color: white;
+        margin: 15% auto; /* Centered */
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%; /* Could be more or less, depending on screen size */
+        max-width: 500px;
+        text-align: center;
+        position: relative;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Optional: shadow effect */
+    }
+
+    .close {
+        color: white;
+        font-size: 28px;
+        font-weight: bold;
+        cursor: pointer;
+        position: absolute;
+        bottom: 10px; /* Move to bottom */
+        right: 10px; /* Align to the right */
+    }
+
+    .close:hover,
+    .close:focus {
+        color: rgba(255,255,255,0.2);
+        text-decoration: none;
+    }
+
+    /* Style for dialog buttons */
+    .dialog button {
+        color: white;
+        padding: 5px 10px; /* Smaller padding */
+        font-size: 14px; /* Smaller font size */
+        cursor: pointer;
+        margin: 5px;
+        border: 1px solid white;
+        border-radius: 5px; /* Optional: Rounded corners */
+        background-color: black; /* Optional: Background color */
+    }
+
+    .dialog button:hover {
+        background-color: white; /* Optional: Background color on hover */
+        color: black;
+    }
+</style>
+    <script>
+      let currentSlide = 0;
+      const intervalTime = 10000;
+      function showSlide(index) {
+        const slides = document.querySelector('.slides');
+        const totalSlides = document.querySelectorAll('.slide').length;
+
+        if (index < 0) {
+          currentSlide = totalSlides - 1;
+        } else if (index >= totalSlides) {
+          currentSlide = 0;
+        } else {
+          currentSlide = index;
+        }
+
+        const translateValue = -currentSlide * 100 + '%';
+        slides.style.transform = 'translateX(' + translateValue + ')';
+      }
+
+      function prevSlide() {
+        showSlide(currentSlide - 1);
+        resetInterval();
+      }
+
+      function nextSlide() {
+        showSlide(currentSlide + 1);
+        resetInterval();
+      }
+
+      function resetInterval() {
+        clearInterval(sliderInterval);
+        sliderInterval = setInterval(() => {
+          nextSlide();
+        }, intervalTime);
+      }
+
+      let sliderInterval = setInterval(() => {
+        nextSlide();
+      }, intervalTime);
+
+      function openDialog() {
+          document.getElementById('reportDialog').style.display = 'block';
+      }
+
+      function closeDialog() {
+          document.getElementById('reportDialog').style.display = 'none';
+      }
+
+      function navigateToPage(page) {
+          window.location.href = page;
+      }
+    </script>
+</head>
+
+<body style="background-color: rgb(127, 0, 0); background-size: cover; background-repeat: repeat;">
+    <nav class="navbar">
+        <div class="logo">
+          <a href="http://localhost:3000/client/homeclient.html"><img src="fireprev/NEWLOGO1.png" style="margin-left: 40px; height: 100px; width: 100px;"/></a>
+          <img src="fireprev/NEWLOGO3.png" style="margin-left: 1250px; height: 90px; width: 90px;">
+        </div>
+
+        <div class="navtitle" style="margin-left: 30%;">
+        <ul>
+          <li><a href="http://localhost:3000/client/about.html">ABOUT</a></li>
+          <li><a href="http://localhost:3000/client/client.html">MAP</a></li>
+          <li><a href="http://localhost:3000/client/reports.html">REPORTS</a></li>
+          <li><a href="http://localhost:3000/client/local.html">LOCAL WORKSHOP</a></li>
+        </ul>
+      </div>
+    </nav>
+    <br><br>
+    <div class="slider">
+      <div class="slides">
+        <div class="slide"><img src="fireprev/BFP.gif" alt="Slide 1"/></div>
+        <div class="slide"><img src="fireprev/S2.jpg" alt="Slide 2"/></div>
+        <div class="slide"><img src="fireprev/BG.jpg" alt="Slide 3"/></div>
+      </div>
+    </div>
+
+    <div class="navi">
+      <button class="prev" onclick="prevSlide()">❮</button>
+      <button class="next" onclick="nextSlide()">❯</button>
+    </div>
+
+    <!-- Dialog Box for Reports -->
+    <div id="reportDialog" class="dialog">
+        <div class="dialog-content">
+            
+            <h3>SELECT BARANGAY</h3>
+            <button onclick="navigateToPage('bambang.html')">BAMBANG</button>
+            <button onclick="navigateToPage('pinagbuhatan.html')">PINAGBUHATAN</button>
+            <button onclick="navigateToPage('san.html')">SAN NICOLAS</button>
+            <span class="close" onclick="closeDialog()">&times;</span>
+        </div>
+    </div>
+    
+
+    <script>
+        // Additional JavaScript for modal functionality
+        function openModal(imageSrc) {
+            document.getElementById('modalImg').src = imageSrc;
+            document.getElementById('myModal').style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('myModal').style.display = 'none';
+        }
+    </script>
+</body>
+</html>

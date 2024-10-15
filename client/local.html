@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Local Workshop</title>
+    <link rel="stylesheet" href="about.css"/>
+    <link rel="icon" href="fireprev/icon1.ico" type="image">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <style>
+        /* Modal styles */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed;
+            z-index: 1; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgba(0,0,0,0.8); /* Black background with opacity */
+            text-align: center; /* Centering modal content */
+        }
+
+        .modal-content {
+            max-width: 90%; /* Responsive width */
+            max-height: 80vh; /* Responsive height */
+            margin: auto;
+            display: block;
+        }
+
+        .modal img {
+            width: 100%; /* Make image take full width of modal */
+            height: auto; /* Maintain aspect ratio */
+        }
+
+        .close {
+            color: white;
+            font-size: 28px;
+            font-weight: bold;
+            position: absolute;
+            top: 10px;
+            right: 25px;
+            cursor: pointer;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #bbb;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* Table image styles */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        td {
+            padding: 10px;
+            text-align: center;
+        }
+
+        td img {
+            width: 100%; /* Make images responsive */
+            height: auto; /* Maintain aspect ratio */
+            max-width: 250px; /* Optional: Set a maximum width */
+            cursor: pointer;
+            transition: transform 0.2s; /* Smooth zoom effect */
+        }
+
+        td img:hover {
+            transform: scale(1.50); /* Slight zoom effect on hover */
+        }
+
+        .tips h3 {
+            color: white;
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        /* Dialog box styles */
+        .dialog {
+            display: none; /* Hidden by default */
+            position: fixed;
+            z-index: 2; /* Sit on top of other content */
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.7); /* Dark background */
+            overflow: auto; /* Enable scroll if needed */
+            text-align: center; /* Center dialog content */
+        }
+
+        .dialog-content {
+            background-color: black;
+            color: white;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid white;
+            width: 80%;
+            max-width: 400px; /* Optional: Set a maximum width */
+            position: relative; /* Positioning context for the close button */
+        }
+
+        .dialog-content h3 {
+            margin-top: 0;
+        }
+
+        .dialog-content button {
+            margin: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: black;
+            color: white;
+            border: 1px solid black;
+        }
+
+        .dialog-content button:hover {
+            background-color: white; /* Optional: Background color on hover */
+            color: black;
+        }
+
+        .dialog-content .close {
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            cursor: pointer;
+        }
+
+        .dialog-content .close:hover,
+        .dialog-content .close:focus {
+            color: rgba(255,255,255,0.2);
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* Center link styles */
+        .learn-more-container {
+            text-align: center; /* Center-align text and inline elements */
+            margin: 15px 0; /* Add some margin for spacing */
+        }
+
+        .learn-more-container a {
+            color: white;
+            font-size: 12px;
+            text-decoration: none;
+            border: 1px solid white; /* Add a border for visibility */
+            padding: 10px 20px;
+            border-radius: 5px;
+            background-color: rgba(255,255,255,0.2); /* Semi-transparent background */
+        }
+
+        .learn-more-container a:hover {
+            background-color: yellow; /* Lighter background on hover */
+            color: black;
+            border-color: black;
+        }
+
+
+        .rdialog {
+        display: none; /* Hidden by default */
+        position: fixed;
+        z-index: 1; /* Sit on top */
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgba(0,0,0,0.8); /* Black background with higher opacity */
+    }
+
+    .rdialog-content {
+        background-color: black;
+        color: white;
+        margin: 15% auto; /* Centered */
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%; /* Could be more or less, depending on screen size */
+        max-width: 500px;
+        text-align: center;
+        position: relative;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Optional: shadow effect */
+    }
+
+    .rclose {
+        color: white;
+        font-size: 28px;
+        font-weight: bold;
+        cursor: pointer;
+        position: absolute;
+        bottom: 10px; /* Move to bottom */
+        right: 10px; /* Align to the right */
+    }
+
+    .rclose:hover,
+    .rclose:focus {
+        color: rgba(255,255,255,0.2);
+        text-decoration: none;
+    }
+
+    /* Style for dialog buttons */
+    .rdialog button {
+        color: white;
+        padding: 5px 10px; /* Smaller padding */
+        font-size: 14px; /* Smaller font size */
+        cursor: pointer;
+        margin: 5px;
+        border: 1px solid white;
+        border-radius: 5px; /* Optional: Rounded corners */
+        background-color: black; /* Optional: Background color */
+    }
+
+    .rdialog button:hover {
+        background-color: white; /* Optional: Background color on hover */
+        color: black;
+    }
+    </style>
+</head>
+
+<body style="background-color: rgb(127, 0, 0); background-size: cover;background-repeat: repeat;">
+    <nav class="navbar">
+        <div class="logo">
+          <a href="http://localhost:3000/client/homeclient.html"><img src="fireprev/NEWLOGO1.png" style="margin-left: 40px; height: 100px; width: 100px;"/></a>
+          <img src="fireprev/NEWLOGO3.png" style="margin-left: 1250px; height: 90px; width: 90px;">
+        </div>
+
+        <div class="navtitle" style="margin-left: 35%;">
+        <ul>
+          <li><a href="http://localhost:3000/client/homeclient.html">HOME</a></li>
+          <li><a href="http://localhost:3000/client/reports.html">REPORTS</a></li>
+          <li><a href="http://localhost:3000/client/about.html">ABOUT</a></li>
+          <li><a href="http://localhost:3000/client/client.html">MAP</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <div class="tips">
+        <h3>IMPORTANT THINGS YOU NEED TO KNOW</h3>
+        <br>
+        <table>
+            <tr>
+                <td onclick="openModal('fireprev/2.png')">
+                    <img src="fireprev/2.png" alt="Image 1">
+                </td>
+                <td onclick="openModal('fireprev/3.png')">
+                    <img src="fireprev/3.png" alt="Image 2">
+                </td>
+                <td onclick="openModal('fireprev/4.png')">
+                    <img src="fireprev/4.png" alt="Image 3">
+                </td>
+            </tr>
+            <tr>
+                <td onclick="openModal('fireprev/5.png')">
+                    <img src="fireprev/5.png" alt="Image 4">
+                </td>
+                <td onclick="openModal('fireprev/6.png')">
+                    <img src="fireprev/6.png" alt="Image 5">
+                </td>
+                <td onclick="openModal('fireprev/7.png')">
+                    <img src="fireprev/7.png" alt="Image 6">
+                </td>
+            </tr>
+            <tr>
+                <td onclick="openModal('fireprev/8.png')">
+                    <img src="fireprev/8.png" alt="Image 7">
+                </td>
+                <td onclick="openModal('fireprev/9.png')">
+                    <img src="fireprev/9.png" alt="Image 8">
+                </td>
+                <td onclick="openModal('fireprev/10.png')">
+                    <img src="fireprev/10.png" alt="Image 9">
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="learn-more-container">
+        <a href="javascript:void(0);" onclick="openDialog()">LEARN MORE</a>
+    </div>
+
+    <!-- Modal for images -->
+    <div id="myModal" class="modal">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <img class="modal-content" id="modalImg" alt="Modal Image">
+    </div>
+
+    <!-- Dialog for Fire Tips -->
+    <div id="dialogBox" class="dialog">
+        <div class="dialog-content">
+            <h3>SELECT OPTION</h3>
+            <button onclick="window.location.href='prevention.html'">FIRE PREVENTION GUIDE</button>
+            <button onclick="window.location.href='outbreak.html'">FIRE OUTBREAK GUIDE</button>
+            <span class="close" onclick="closeDialog()">&times;</span>
+        </div>
+    </div>
+
+    <!-- Dialog for Reports -->
+    <div id="reportDialogBox" class="rdialog">
+        <div class="rdialog-content">
+            <h3>SELECT BARANGAY</h3>
+            <button onclick="window.location.href='bambang.html'">BAMBANG</button>
+            <button onclick="window.location.href='pinagbuhatan.html'">PINAGBUHATAN</button>
+            <button onclick="window.location.href='san.html'">SAN NICOLAS</button>
+            <span class="rclose" onclick="closeReportDialog()">&times;</span>
+        </div>
+    </div>
+
+    <script>
+        // Open the modal for images
+        function openModal(imageSrc) {
+            document.getElementById('modalImg').src = imageSrc;
+            document.getElementById('myModal').style.display = 'block';
+        }
+
+        // Close the modal for images
+        function closeModal() {
+            document.getElementById('myModal').style.display = 'none';
+        }
+
+        // Open the dialog box for fire tips
+        function openDialog() {
+            document.getElementById('dialogBox').style.display = 'block';
+        }
+
+        // Close the dialog box for fire tips
+        function closeDialog() {
+            document.getElementById('dialogBox').style.display = 'none';
+        }
+
+        // Handle dialog choices for fire tips
+        function handleChoice(option) {
+            alert('You selected ' + option);
+            closeDialog();
+        }
+
+        // Open the dialog box for reports
+        function openReportDialog() {
+            document.getElementById('reportDialogBox').style.display = 'block';
+        }
+
+        // Close the dialog box for reports
+        function closeReportDialog() {
+            document.getElementById('reportDialogBox').style.display = 'none';
+        }
+    </script>
+</body>
+</html>

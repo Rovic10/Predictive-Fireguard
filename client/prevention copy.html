@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Leaflet Map with Weather Info</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <style>
+        #map {
+            height: 100vh;
+            width: 100%;
+        }
+        .weather-info {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: white;
+            border-radius: 5px;
+            padding: 10px;
+            z-index: 1000;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+            font-family: Arial, sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+    <div class="weather-info" id="weather-info">
+        Loading weather info...
+    </div>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+        // Initialize the map
+        var map = L.map('map').setView([14.558762, 121.074274], 13);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        // Fetch weather data from OpenWeatherMap API
+        var apiKey = 'f8f2cfe802bacc2cf833745f7e03752a'; // Replace with your API key
+        var weatherUrl = `https://api.openweathermap.org/data/2.5/weather?q=Pasig,ph&appid=${apiKey}&units=metric`;
+
+        fetch(weatherUrl)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok ' + response.statusText);
+                }
+                return response.json();
+            })
+            .then(data => {
+                var temp = data.main.temp;
+                var weather = data.weather[0].description;
+                document.getElementById('weather-info').innerHTML = `
+                    <strong>Weather in Pasig City:</strong><br>
+                    Temperature: ${temp}°C<br>
+                    Condition: ${weather.charAt(0).toUpperCase() + weather.slice(1)}
+                `;
+            })
+            .catch(error => {
+                console.error('Error fetching weather data:', error);
+                document.getElementById('weather-info').innerHTML = 'Error loading weather info.';
+            });
+    </script>
+</body>
+</html>

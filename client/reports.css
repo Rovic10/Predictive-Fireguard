@@ -1,0 +1,25 @@
+body {
+    background-color: black;
+    color: white;
+    text-align: center;
+    margin: 50px;
+}
+
+.report-section {
+    margin-bottom: 40px;
+}
+.report-section h3 {
+    margin-bottom: 10px;
+}
+table {
+    width: 80%; /* or any width you prefer */
+    margin: 0 auto; /* Center align the table */
+    border-collapse: collapse;
+}
+table, th, td {
+    border: 1px solid white;
+}
+th, td {
+    padding: 8px;
+    text-align: left;
+}
