@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="pinagbuhatan.css" />
+    <title>Pinagbuhatan</title>
+    <style>
+        .search-bar {
+            margin-bottom: 20px;
+        }
+        .search-bar input {
+            margin-right: 10px;
+        }
+
+        /* Center the form container */
+        .form-container {
+            width: 60%; /* Adjust width as needed */
+            margin: 20px auto; /* Center the form horizontally and add margin from top and bottom */
+            background-color: #fff; /* Background color for better visibility */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add a shadow effect for better appearance */
+            display: none; /* Initially hide the form */
+        }
+
+        /* Style the table inside the form */
+        .form-container table {
+            width: 100%; /* Make the table take full width of the form container */
+            border-collapse: collapse; /* Collapse borders for a cleaner look */
+        }
+
+        .form-container th, .form-container td {
+            padding: 10px; /* Add padding to table cells */
+            text-align: left; /* Align text to the left within cells */
+            border: 1px solid #ddd; /* Add border to cells */
+        }
+
+        /* Optional: Style the table header */
+        .form-container th {
+            background-color: #f4f4f4; /* Background color for table header */
+            font-weight: bold; /* Bold text for header */
+        }
+
+        /* Optional: Style form labels and inputs */
+        .form-container label {
+            display: block; /* Display labels as block elements */
+            margin-bottom: 5px; /* Add space below labels */
+        }
+
+        .form-container input {
+            width: 100%; /* Make inputs take full width of their container */
+            padding: 8px; /* Add padding inside inputs */
+            border: 1px solid #ccc; /* Border for inputs */
+            border-radius: 4px; /* Rounded corners for inputs */
+        }
+
+        .form-container button {
+            color: black;
+            background-color: white;
+            border: 1px solid white;
+            border: none; /* Remove default button border */
+            padding: 10px 20px; /* Button padding */
+            text-align: center; /* Center text in button */
+            text-decoration: none; /* Remove underline from text */
+            display: inline-block; /* Make button inline-block */
+            font-size: 16px; /* Font size for button text */
+            margin-top: 10px; /* Space above button */
+            cursor: pointer; /* Pointer cursor on hover */
+        }
+
+        .form-container button:hover {
+            background-color: #45a049; /* Darker background on hover */
+        }
+
+        /* Style for the show form button */
+        .show-form-button {
+            display: block;
+            color: white;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background-color: #6c0000;
+            color: white;
+            border: 1px solid white;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .show-form-button:hover {
+            background-color: #0056b3;
+        }
+        
+        /* General button style */
+.records button {
+    padding: 8px 15px; /* Padding for button size */
+    border: none; /* Remove default border */
+    border-radius: 4px; /* Rounded corners */
+    font-size: 14px; /* Font size */
+    cursor: pointer; /* Pointer cursor on hover */
+    margin: 2px; /* Space between buttons */
+    transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition for hover effects */
+}
+
+/* Style for Edit button */
+.btn-edit {
+    background-color: #007bff; /* Blue background color */
+    padding: 10px;
+    color: white; /* White text color */
+}
+
+.btn-edit:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+}
+
+/* Style for Delete button */
+.btn-delete {
+    background-color: #dc3545; /* Red background color */
+    color: white; /* White text color */
+}
+
+.btn-delete:hover {
+    background-color: #c82333; /* Darker red on hover */
+}
+
+/* Style the table inside the form */
+.form-container table {
+    width: 100%; /* Make the table take full width of the form container */
+    border-collapse: collapse; /* Collapse borders for a cleaner look */
+}
+
+.form-container th, .form-container td {
+    padding: 10px; /* Add padding to table cells */
+    text-align: left; /* Align text to the left within cells */
+    border: 1px solid white; /* White border color */
+}
+
+/* Optional: Style the table header */
+.form-container th {
+    background-color: #f4f4f4; /* Background color for table header */
+    font-weight: bold; /* Bold text for header */
+    border-bottom: 2px solid white; /* White border at the bottom of the header */
+}
+
+/* Style for the table in records section */
+.records {
+    width: 100%; /* Make the table take full width */
+    border-collapse: collapse; /* Collapse borders for a cleaner look */
+    margin-top: 20px; /* Space above the table */
+}
+
+.records th, .records td {
+    padding: 10px; /* Add padding to table cells */
+    text-align: left; /* Align text to the left within cells */
+    border: 1px solid white; /* White border color */
+}
+
+/* Optional: Style the table header for records section */
+.records th {
+    background-color: #b60000; /* Dark background for header to contrast with white text */
+    color: white; /* White text color */
+    border-bottom: 2px solid white; /* White border at the bottom of the header */
+}
+
+
+    </style>
+</head>
+<body style="background-color: rgb(127, 0, 0); background-size: cover;background-repeat: repeat;">
+    <nav class="navbar">
+        <div class="logo">
+            <a href="http://localhost:3000/server/server.html"><img src="Images/NEWLOGO1.png" style="margin-left: 40px; height: 100px; width: 100px;"/></a>
+            <img src="Images/NEWLOGO3.png" style="margin-left: 1250px; height: 90px; width: 90px;">
+        </div>
+        <div class="navtitle" style="margin-left: 0%;">
+            <ul style="font-family: Arial, sans-serif;">
+                <li><a href="http://localhost:3000/server/server.html">SERVER</a></li>
+                <li><a href="http://localhost:3000/server/pinagbuhatan.html">PINAGBUHATAN</a></li>
+                <li><a href="http://localhost:3000/server/bambang.html">BAMBANG</a></li>
+                <li><a href="http://localhost:3000/server/san.html">SAN NICOLAS</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Button to show the form -->
+    <button class="show-form-button" onclick="showForm()">NEW RECORD</button>
+
+    <!-- Incident form initially hidden -->
+    <form id="incident-form" class="form-container">
+        <table>
+            <tr>
+                <th>
+                    <label for="date">Date:</label>
+                    <input type="date" id="date" name="date" required>
+                </th>
+                
+                <th>
+                    <label for="location">Location:</label>
+                    <input type="text" id="location" name="location" required>
+                </th>
+                
+                <th>
+                    <label for="cause">Cause:</label>
+                    <input type="text" id="cause" name="cause" required>
+                </th>
+
+                <th>
+                    <button type="submit" class="form-submit-button">Add Record</button>
+                </th>
+            </tr>
+        </table>
+    </form>
+    <object style="color: white; font-size: 12px;"><i>select date for searh records</i></object>
+    <div class="search-bar">
+        
+        <form id="search-form">
+            <input type="date" id="search-date" name="search-date" placeholder="Search by date">
+            <button type="submit">Search</button>
+        </form>
+        
+    </div>
+    
+
+    <table class="records">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Date</th>
+                <th>Location</th>
+                <th>Cause</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="incidents-table">
+            <!-- Data will be inserted here by JavaScript -->
+        </tbody>
+    </table>
+
+    <script>
+        // Function to show the form
+        function showForm() {
+            const form = document.getElementById('incident-form');
+            form.style.display = form.style.display === 'none' ? 'block' : 'none';
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            fetchRecords();
+
+            document.getElementById('incident-form').addEventListener('submit', function(event) {
+                event.preventDefault();
+                const formData = new FormData(event.target);
+                const formDataJson = JSON.stringify(Object.fromEntries(formData.entries()));
+                const form = event.target;
+                const recordId = form.getAttribute('data-id');
+
+                const method = recordId ? 'PUT' : 'POST'; // Use PUT if editing, POST if adding
+                const url = recordId ? `http://localhost:5001/api/pinagbuhatan_records/${recordId}` : 'http://localhost:5001/api/pinagbuhatan_records';
+
+                fetch(url, {
+                    method: method,
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: formDataJson
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        alert(`Record ${recordId ? 'updated' : 'added'} successfully!`);
+                        form.removeAttribute('data-id'); // Clear data-id after update
+                        form.reset(); // Reset form fields
+                        showForm(); // Hide form after successful submission
+                        fetchRecords(); // Refresh the table
+                    } else {
+                        alert('Error: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error. Please try again later.');
+                });
+            });
+
+            document.getElementById('search-form').addEventListener('submit', function(event) {
+                event.preventDefault();
+                const searchDate = document.getElementById('search-date').value;
+                fetchRecords(searchDate);
+            });
+        });
+
+        function fetchRecords(searchDate = '') {
+            let url = 'http://localhost:5001/api/pinagbuhatan_records';
+            if (searchDate) {
+                const params = new URLSearchParams({ date: searchDate });
+                url += `?${params.toString()}`;
+            }
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    const table = document.getElementById('incidents-table');
+                    table.innerHTML = ''; // Clear existing table data
+
+                    data.forEach(incident => {
+                        const date = new Date(incident.date);
+                        const formattedDate = date.toLocaleString('default', { month: 'long' }) + ' ' + date.getDate() + ', ' + date.getFullYear();
+
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${incident.id}</td>
+                            <td>${formattedDate}</td>
+                            <td>${incident.location}</td>
+                            <td>${incident.cause}</td>
+                            <td>
+                                <button onclick="editRecord(${incident.id})" class="btn-edit">Edit</button>
+                                <button onclick="deleteRecord(${incident.id})" class="btn-delete">Delete</button>
+                            </td>
+
+                        `;
+                        table.appendChild(row);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching records:', error);
+                    document.getElementById('incidents-table').innerHTML = '<tr><td colspan="5" class="error">Error loading data. Please try again later.</td></tr>';
+                });
+        }
+
+        function editRecord(id) {
+            fetch(`http://localhost:5001/api/pinagbuhatan_records/${id}`)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('date').value = data.date;
+                    document.getElementById('location').value = data.location;
+                    document.getElementById('cause').value = data.cause;
+                    document.getElementById('incident-form').setAttribute('data-id', id);
+                    showForm(); // Show the form when editing
+                })
+                .catch(error => {
+                    console.error('Error fetching record for edit:', error);
+                });
+        }
+
+        function deleteRecord(id) {
+            if (confirm('Are you sure you want to delete this record?')) {
+                fetch(`http://localhost:5001/api/pinagbuhatan_records/${id}`, {
+                    method: 'DELETE'
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        alert('Record deleted successfully!');
+                        fetchRecords(); // Refresh the table
+                    } else {
+                        alert('Error deleting record: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error deleting record:', error);
+                    alert('Error deleting record. Please try again later.');
+                });
+            }
+        }
+    </script>
+</body>
+</html>

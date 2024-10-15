@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Server</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="server.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.css">
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
+    <style>
+        #map {
+            margin-top: 35px;
+            height: 76vh;
+            width: 95%;
+            margin-left: 2.5%;
+        }
+
+        .weather-info {
+            position: absolute;
+            bottom: 60px;
+            right: 60px;
+            background: white;
+            border-radius: 0px;
+            padding: 10px; /* Reduced padding */
+            z-index: 1000;
+            box-shadow: 0 0 5px rgba(0,0,0,0.3); /* Reduced shadow */
+            font-family: Arial, sans-serif;
+            font-size: 10px; /* Smaller font size */
+            width: 140px; /* Reduced width */
+            max-width: 100%; /* Ensures it doesn’t exceed its container */
+        }
+
+        .cbox {
+            display: none; /* Hidden by default */
+            position: fixed; /* Fixed positioning */
+            bottom: 100px; /* Adjust as needed */
+            left: -1150px; /* Align to the left side */
+            background-color: rgba(255, 255, 255, 0.9); /* Semi-transparent white */
+            color: black; /* Change text color to black for better readability */
+            padding: 10px; /* Padding */
+            box-shadow: 0 0 10px rgba(0,0,0,0.3); /* Shadow for better visibility */
+            z-index: 1000; /* Make sure it's above other content */
+            width: 135px; /* Adjust width as needed */
+            max-width: 100%; /* Ensure it doesn't exceed its container */
+            font-size: 12px;
+        }
+
+        /* Style for the small Barangay button */
+        .small-button {
+            position: absolute;
+            bottom: 60px;
+            left: 60px;
+            padding: 5px 10px; /* Smaller padding */
+            font-size: 9px; /* Smaller font size */
+            border: 1px solid #ccc; /* Border color */
+            background-color: #007bff; /* Background color */
+            color: white; /* Text color */
+            cursor: pointer;
+            transition: background-color 0.3s ease; /* Smooth background color transition */
+            z-index: 1000;
+        }
+
+        .small-button:hover {
+            background-color: #0056b3; /* Darker background color on hover */
+        }
+
+        .small-button:focus {
+            outline: none; /* Remove default focus outline */
+        }
+    </style>
+</head>
+<body style="background-color: rgb(127, 0, 0); background-size: cover;background-repeat: repeat;">
+    <nav class="navbar">
+        <div class="logo">
+            <a href="http://localhost:3000/server/server.html"><img src="Images/NEWLOGO1.png" style="margin-left: 40px; height: 100px; width: 100px;"/></a>
+            <img src="Images/NEWLOGO3.png" style="margin-left: 1250px; height: 90px; width: 90px;">
+        </div>
+        <div class="navtitle" style="margin-left: 33%;">
+            <ul>
+                <li><a href="http://localhost:3000/server/pinagbuhatan.html">PINAGBUHATAN</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div id="map"></div>
+    <div class="weather-info" id="weather-info">
+        Loading weather info...
+    </div>
+
+    <script>
+        var pinagbuhatanCoords = [
+            [14.553650, 121.083345],
+            [14.561864, 121.088117],
+            [14.562017, 121.088156],
+            [14.562082, 121.088853],
+            [14.561655, 121.089636],
+            [14.562480, 121.090455],
+            [14.562230, 121.094072],
+            [14.561294, 121.094338],
+            [14.561966, 121.096619],
+            [14.561963, 121.097283],
+            [14.561891, 121.097241],
+            [14.560086, 121.096197],
+            [14.558417, 121.098156],
+            [14.555080, 121.098249],
+            [14.554810, 121.097927],
+            [14.553194, 121.099457],
+            [14.553574, 121.100503],
+            [14.553419, 121.101160],
+            [14.548364, 121.107844],
+            [14.541509, 121.105542],
+            [14.538915, 121.105568],
+            [14.534468, 121.104208],
+            [14.537877, 121.098885],
+            [14.539705, 121.097941],
+            [14.541015, 121.096537],
+            [14.543964, 121.096574],
+            [14.545597, 121.094904],
+            [14.553406, 121.092415],
+            [14.552637, 121.089247],
+            [14.553502, 121.088105],
+            [14.553724, 121.084861],
+            [14.553626, 121.084834],
+            [14.553647, 121.083340]
+        ];
+
+        var pasigCoords = [
+            [14.56802217610024, 121.05139885036523],
+            [14.568025823259353, 121.05140660582792],
+        ];
+
+        // Initialize the map
+        var map = L.map('map').setView([14.558762, 121.074274], 13);  // Default view
+
+        // Create Pinagbuhatan polygon (we'll change its color later)
+        var pinagbuhatanPolygon = L.polygon(pinagbuhatanCoords, { color: 'red', fillOpacity: 0.2, opacity: 0.5, weight: 1 })
+            .addTo(map)
+            .bindPopup("Barangay Pinagbuhatan, Pasig City");
+
+        // Create Pasig City polygon
+        var pasigPolyline = L.polyline(pasigCoords, { color: 'blue' }).addTo(map);
+        var pasigPolygon = L.polygon(pasigCoords, { color: 'blue', fillOpacity: 0.2, opacity: 0.5, weight: 1 }).addTo(map)
+            .bindPopup("Pasig City");
+
+        // Add OpenStreetMap tiles
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        // Fetch weather data from OpenWeatherMap API
+        var apiKey = 'f8f2cfe802bacc2cf833745f7e03752a'; // Replace with your API key
+        var weatherUrl = `https://api.openweathermap.org/data/2.5/weather?q=Pasig,ph&appid=${apiKey}&units=metric`;
+
+        fetch(weatherUrl)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok ' + response.statusText);
+                }
+                return response.json();
+            })
+            .then(data => {
+                var temp = data.main.temp;
+                var weather = data.weather[0].description;
+                document.getElementById('weather-info').innerHTML = `
+                    <strong>Pasig City</strong><br>
+                    <strong>Temperature:</strong> ${temp}°C<br>
+                    <strong>Weather:</strong> ${weather}
+                `;
+            })
+            .catch(error => {
+                console.error('There was a problem fetching weather data:', error);
+                document.getElementById('weather-info').innerHTML = 'Error fetching weather info';
+            });
+
+        // Function to get color based on fire outbreak percentage
+        function getColorByFireOutbreakPercentage(percentage) {
+            if (percentage <= 30) {
+                return 'green'; // Low risk
+            } else if (percentage > 30 && percentage <= 70) {
+                return 'yellow'; // Medium risk
+            } else {
+                return 'red'; // High risk
+            }
+        }
+
+        // Fetch prediction data and change polygon color based on fire outbreak percentage
+        function getColorByFireOutbreakPercentage(percentage) {
+        console.log("Percentage:", percentage);  // Debugging log
+
+        if (percentage <= 30) {
+            return 'green'; // Low risk
+        } else if (percentage > 30 && percentage <= 70) {
+            return 'yellow'; // Medium risk
+        } else {
+            return 'red'; // High risk
+        }
+    }
+
+    $(document).ready(function() {
+        $('#getPrediction').on('click', function() {
+            $.get('http://localhost:5001/api/predict_today', function(data) {
+                // Display the percentage chance of fire outbreak
+                $('#result').text('Chance of fire outbreak today: ' + data.percentage_chance_of_fire_outbreak_today);
+
+                // Display additional details
+                $('#similarityFire').text('Similarity to fire days: ' + data.similarity_to_fire_days.toFixed(2));
+                $('#similarityNoFire').text('Similarity to non-fire days: ' + data.similarity_to_non_fire_days.toFixed(2));
+                $('#averageFire').text('Average Weather on Fire Days - Temperature: ' + data.average_weather_on_fire_days.Temperature + '°C, Wind Speed: ' + data.average_weather_on_fire_days['Wind Speed'] + ' m/s, Precipitation: ' + data.average_weather_on_fire_days.Precipitation + ' mm');
+                $('#averageNoFire').text('Average Weather on Non-Fire Days - Temperature: ' + data.average_weather_on_non_fire_days.Temperature + '°C, Wind Speed: ' + data.average_weather_on_non_fire_days['Wind Speed'] + ' m/s, Precipitation: ' + data.average_weather_on_non_fire_days.Precipitation + ' mm');
+
+                // Ensure percentage is a number
+                var percentage = parseFloat(data.percentage_chance_of_fire_outbreak_today);
+
+                console.log("Fire outbreak percentage:", percentage);  // Debugging log
+
+                // Get color based on fire outbreak percentage
+                var newColor = getColorByFireOutbreakPercentage(percentage);
+                console.log("New polygon color:", newColor);  // Debugging log
+
+                // Update the color of the Pinagbuhatan polygon
+                if (pinagbuhatanPolygon) {
+                    pinagbuhatanPolygon.setStyle({ color: newColor });
+                    console.log("Polygon style updated to:", newColor);  // Confirm the update
+                }
+            }).fail(function() {
+                $('#result').text('Error fetching prediction.');
+            });
+        });
+    });
+    </script>
+    
+    <div class="container mt-4">
+        <button class="btn btn-primary" id="getPrediction">Get Today's Fire Prediction</button>
+        <p id="result"></p>
+        <p id="similarityFire"></p>
+        <p id="similarityNoFire"></p>
+        <p id="averageFire"></p>
+        <p id="averageNoFire"></p>
+    </div>
+
+</body>
+</html>
